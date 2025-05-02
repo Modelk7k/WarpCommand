@@ -85,7 +85,19 @@ public class WarpsCommand {
                             return player != null && player.getTags().contains("staff");
                         })
                         .then(Commands.argument("name", StringArgumentType.greedyString())
-                                .executes(this::removeWarp))
+                                .suggests((context, builder) -> {
+                                    ServerPlayer player = context.getSource().getPlayer();
+                                    if (player != null) {
+                                        ResourceKey<Level> worldName = player.level().dimension();
+                                        Map<String, BlockPos> worldWarps = warpPointsByWorld.getOrDefault(worldName, new HashMap<>());
+                                        for (String warp : worldWarps.keySet()) {
+                                            builder.suggest(warp);
+                                        }
+                                    }
+                                    return builder.buildFuture();
+                                })
+                                .executes(this::removeWarp)
+                        )
         );
     }
     private int execute(CommandContext<CommandSourceStack> context) {
