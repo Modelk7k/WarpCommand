@@ -58,7 +58,7 @@ public class WarpsCommand {
                                         for (ServerLevel level : server.getAllLevels()) {
                                             String id = level.dimension().location().toString();
                                             String simpleName = defaultDims.getOrDefault(id, id.split(":")[1]);
-                                            String normalized = simpleName.replace("_", "").toLowerCase();
+                                            String normalized = simpleName.toLowerCase();
                                             if (normalizedSuggestions.add(normalized)) {
                                                 builder.suggest(simpleName);
                                             }
@@ -198,9 +198,10 @@ public class WarpsCommand {
         return null;
     }
     private void teleportPlayerToDimension(ServerPlayer player, ServerLevel dimensionLevel) {
-        player.teleportTo(dimensionLevel, player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
+        player.teleportTo(dimensionLevel, 0, player.getY(), 0, player.getYRot(), player.getXRot());
         player.connection.send(new ClientboundTeleportEntityPacket(player));
     }
+
     public void setWarpPoint(String warpName, BlockPos pos, MinecraftServer server, ResourceKey<Level> worldName) {
         warpPointsByWorld.computeIfAbsent(worldName, k -> new HashMap<>()).put(warpName.toLowerCase(), pos);
         saveWarpPoints(server, worldName);
