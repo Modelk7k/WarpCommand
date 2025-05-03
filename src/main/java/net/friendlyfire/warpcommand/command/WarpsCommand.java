@@ -201,7 +201,6 @@ public class WarpsCommand {
         player.teleportTo(dimensionLevel, 0, player.getY(), 0, player.getYRot(), player.getXRot());
         player.connection.send(new ClientboundTeleportEntityPacket(player));
     }
-
     public void setWarpPoint(String warpName, BlockPos pos, MinecraftServer server, ResourceKey<Level> worldName) {
         warpPointsByWorld.computeIfAbsent(worldName, k -> new HashMap<>()).put(warpName.toLowerCase(), pos);
         saveWarpPoints(server, worldName);
